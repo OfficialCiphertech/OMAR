@@ -13,7 +13,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [lightboxImage, setLightboxImage] = useState(null);
   // Add your image URL here or fetch it from somewhere
-  const [profileImageUrl, setProfileImageUrl] = useState('https://example.com/your-image.jpg');
+  const [profileImageUrl, setProfileImageUrl] = useState('https://decoy-auction-cars.onrender.com');
 
   useEffect(() => {
     const fetchCars = async () => {
