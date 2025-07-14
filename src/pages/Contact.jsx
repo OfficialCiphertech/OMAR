@@ -64,7 +64,7 @@ const Contact = () => {
                 {
                   icon: Clock,
                   title: "Hours",
-                  info: "Contact details will be added here",
+                  info: "we're opened 24/7 so you can reach out to us at anytime ",
                   description: "Our working hours"
                 }
               ].map((contact, index) => (
