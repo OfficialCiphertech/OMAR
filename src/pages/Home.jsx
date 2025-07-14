@@ -12,7 +12,7 @@ const Home = () => {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lightboxImage, setLightboxImage] = useState(null);
-  const [profileImageUrl] = useState('https://example.com/your-image.jpg'); // Replace with your image URL
+  const [profileImageUrl] = useState('https://zuctusbetucsmsywshyk.supabase.co/storage/v1/object/public/imgurl/w6sd1j_1752533368991.jpg'); // Replace with your image URL
 
   // Smooth scroll function
   const smoothScrollTo = (id) => {
