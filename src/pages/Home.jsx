@@ -10,9 +10,11 @@ import ImageLightbox from '@/components/ImageLightbox';
 
 const Home = () => {
   const [cars, setCars] = useState([]);
+  const [filteredCars, setFilteredCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lightboxImage, setLightboxImage] = useState(null);
   const [profileImageUrl] = useState('https://zuctusbetucsmsywshyk.supabase.co/storage/v1/object/public/imgurl/w6sd1j_1752533368991.jpg'); // Replace with your image URL
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Smooth scroll function
   const smoothScrollTo = (id) => {
@@ -41,6 +43,7 @@ const Home = () => {
         });
       } else {
         setCars(data);
+        setFilteredCars(data);
       }
       setLoading(false);
     };
@@ -54,6 +57,19 @@ const Home = () => {
       setTimeout(() => smoothScrollTo(id), 100);
     }
   }, []);
+
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredCars(cars);
+    } else {
+      const filtered = cars.filter(car => 
+        car.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        car.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        car.price.toString().includes(searchTerm)
+      );
+      setFilteredCars(filtered);
+    }
+  }, [searchTerm, cars]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -199,21 +215,48 @@ const Home = () => {
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Available Cars</h2>
               <p className="text-xl text-gray-600">Browse our current collection</p>
+              
+              {/* Search Bar */}
+              <div className="max-w-md mx-auto mt-6">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search cars by name, description, or price..."
+                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
             </motion.div>
 
             {loading ? (
               <div className="flex justify-center items-center py-16">
                 <Loader2 className="h-16 w-16 text-blue-600 animate-spin" />
               </div>
-            ) : cars.length === 0 ? (
+            ) : filteredCars.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="text-center py-16"
               >
                 <Car className="h-24 w-24 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-semibold text-gray-600 mb-2">No Cars Available</h3>
-                <p className="text-gray-500">Check back soon for new arrivals!</p>
+                <h3 className="text-2xl font-semibold text-gray-600 mb-2">
+                  {searchTerm ? "No matching cars found" : "No Cars Available"}
+                </h3>
+                <p className="text-gray-500">
+                  {searchTerm ? "Try a different search term" : "Check back soon for new arrivals!"}
+                </p>
+                {searchTerm && (
+                  <Button 
+                    variant="outline" 
+                    className="mt-4"
+                    onClick={() => setSearchTerm('')}
+                  >
+                    Clear Search
+                  </Button>
+                )}
               </motion.div>
             ) : (
               <motion.div
@@ -222,7 +265,7 @@ const Home = () => {
                 whileInView="visible"
                 className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
               >
-                {cars.map((car) => (
+                {filteredCars.map((car) => (
                   <motion.div
                     key={car.id}
                     variants={itemVariants}
