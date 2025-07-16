@@ -55,7 +55,7 @@ const Contact = () => {
       const body = `Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0APhone: ${formData.phone}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
       
       // Open default email client
-      window.location.href = `mailto:richvybs92@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = `mailto:osahara.sss@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       
       setSubmitStatus('success');
       setFormData({
