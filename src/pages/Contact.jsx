@@ -20,7 +20,6 @@ const Contact = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user types
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -50,12 +49,64 @@ const Contact = () => {
     setSubmitStatus(null);
     
     try {
-      // Prepare email content
-      const subject = `New Contact Message from ${formData.name}`;
-      const body = `Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0APhone: ${formData.phone}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
+      // Create beautifully formatted email
+      const subject = `New Contact from ${formData.name} - Decoy Auction Cars`;
+      const body = `
+        <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+            <h2 style="color: #2563eb; border-bottom: 2px solid #2563eb; padding-bottom: 10px;">
+              New Contact Message
+            </h2>
+            
+            <div style="margin-bottom: 15px;">
+              <h3 style="margin: 0 0 5px 0; color: #2563eb; font-size: 18px;">Contact Details</h3>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 5px 0; width: 100px; font-weight: bold;">Name:</td>
+                  <td style="padding: 5px 0;">${formData.name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px 0; font-weight: bold;">Email:</td>
+                  <td style="padding: 5px 0;">
+                    <a href="mailto:${formData.email}" style="color: #2563eb; text-decoration: none;">
+                      ${formData.email}
+                    </a>
+                  </td>
+                </tr>
+                ${formData.phone ? `
+                <tr>
+                  <td style="padding: 5px 0; font-weight: bold;">Phone:</td>
+                  <td style="padding: 5px 0;">
+                    <a href="tel:${formData.phone.replace(/[^0-9+]/g, '')}" style="color: #2563eb; text-decoration: none;">
+                      ${formData.phone}
+                    </a>
+                  </td>
+                </tr>
+                ` : ''}
+              </table>
+            </div>
+            
+            <div style="margin-top: 20px;">
+              <h3 style="margin: 0 0 5px 0; color: #2563eb; font-size: 18px;">Message</h3>
+              <div style="background-color: white; padding: 15px; border-radius: 5px; border-left: 4px solid #2563eb;">
+                ${formData.message.replace(/\n/g, '<br>')}
+              </div>
+            </div>
+            
+            <div style="margin-top: 25px; font-size: 12px; color: #6b7280; text-align: center;">
+              <p>This message was sent from the Decoy Auction Cars contact form</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `.replace(/\n\s+/g, '\n'); // Remove extra whitespace
+
+      // Encode the HTML for mailto
+      const encodedBody = encodeURIComponent(body);
       
-      // Open default email client
-      window.location.href = `mailto:osahara.sss@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      // Open email client with formatted message
+      window.location.href = `mailto:osahara.sss@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodedBody}`;
       
       setSubmitStatus('success');
       setFormData({
@@ -120,9 +171,9 @@ const Contact = () => {
                 {
                   icon: Mail,
                   title: "Email",
-                  info: "richvybs92@gmail.com",
+                  info: "osahara.sss@gmail.com",
                   description: "Send us your inquiries",
-                  action: () => window.location.href = "mailto:richvybs92@gmail.com"
+                  action: () => window.location.href = "mailto:osahara.sss@gmail.com"
                 },
                 {
                   icon: Phone,
@@ -182,7 +233,7 @@ const Contact = () => {
                   </div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-2">Message Ready to Send!</h3>
                   <p className="text-gray-600 mb-6">
-                    Your email client should open with your message prepared. 
+                    Your email client should open with a beautifully formatted message. 
                     Just click send to complete the process.
                   </p>
                   <button
@@ -199,7 +250,7 @@ const Contact = () => {
                       <AlertCircle className="flex-shrink-0 inline w-5 h-5 mr-3" />
                       <span className="sr-only">Error</span>
                       <div>
-                        <span className="font-medium">Something went wrong!</span> Please try again or email us directly at richvybs92@gmail.com
+                        <span className="font-medium">Something went wrong!</span> Please try again or email us directly at osahara.sss@gmail.com
                       </div>
                     </div>
                   )}
@@ -283,7 +334,7 @@ const Contact = () => {
                           </svg>
                           Preparing Email...
                         </>
-                      ) : 'Open Email Message'}
+                      ) : 'Send Beautifully Formatted Email'}
                     </button>
                   </div>
                 </form>
